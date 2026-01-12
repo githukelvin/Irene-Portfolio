@@ -9,6 +9,9 @@ import { useScrollAnimation } from '@/composables/useScrollAnimation'
 
 const { elementRef: formRef, isVisible } = useScrollAnimation({ threshold: 0.1 })
 
+// Web3Forms Access Key - Get yours free at https://web3forms.com
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || 'YOUR_ACCESS_KEY_HERE'
+
 const form = ref({
   name: '',
   email: '',
@@ -65,20 +68,36 @@ const handleSubmit = async () => {
   isSubmitting.value = true
   submitStatus.value = null
 
-  // Simulate form submission
   try {
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    const response = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        name: form.value.name,
+        email: form.value.email,
+        subject: `Portfolio Inquiry: ${form.value.subject}`,
+        message: form.value.message,
+        from_name: 'Qoi_tec Portfolio',
+      })
+    })
 
-    // In a real app, you would send the form data to your backend
-    // For now, we'll just simulate success
-    submitStatus.value = 'success'
+    const result = await response.json()
 
-    // Reset form
-    form.value = {
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
+    if (result.success) {
+      submitStatus.value = 'success'
+      // Reset form
+      form.value = {
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      }
+    } else {
+      submitStatus.value = 'error'
     }
   } catch (error) {
     submitStatus.value = 'error'
