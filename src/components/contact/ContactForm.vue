@@ -93,11 +93,12 @@ const isFormValid = computed(() => {
 </script>
 
 <template>
-  <Card
+  <div
     ref="formRef"
     class="transition-all duration-700 ease-out"
     :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'"
   >
+  <Card>
     <CardContent class="p-6 md:p-8">
       <h2 class="text-2xl font-bold mb-2" style="font-family: var(--font-heading)">
         Send a Message
@@ -245,4 +246,5 @@ const isFormValid = computed(() => {
       </form>
     </CardContent>
   </Card>
+  </div>
 </template>
