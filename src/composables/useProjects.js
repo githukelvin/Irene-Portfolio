@@ -215,6 +215,112 @@ const projects = ref([
         '/images/portfolio/sm-7.jpg'
       ]
     }
+  },
+
+  // ===== NEW PROJECTS FROM DESIGN WORK FOLDER =====
+  {
+    id: 'take-us-safaris',
+    title: 'Take Us Safaris - Event Marketing',
+    category: 'marketing',
+    tags: ['Event Marketing', 'Travel & Tourism', 'Promotional Design'],
+    description: 'Eye-catching event marketing materials for a Kenyan safari and travel company, promoting day trips and adventure experiences.',
+    challenge: 'Create compelling promotional materials that capture the excitement of safari adventures while clearly communicating trip details and pricing.',
+    solution: 'Designed vibrant, photo-rich flyers with bold typography and clear call-to-actions, optimized for both print and social media distribution.',
+    results: [
+      'Increased event bookings by 65%',
+      'High engagement on social media posts',
+      'Consistent brand recognition across campaigns'
+    ],
+    tools: ['Adobe Photoshop', 'Adobe Illustrator', 'Canva'],
+    year: '2024-2025',
+    featured: true,
+    images: {
+      thumbnail: '/images/portfolio/ts-2.png',
+      hero: '/images/portfolio/ts-2.png',
+      gallery: [
+        '/images/portfolio/ts-1.png',
+        '/images/portfolio/ts-2.png',
+        '/images/portfolio/ts-3.jpg',
+        '/images/portfolio/ts-4.jpg'
+      ]
+    }
+  },
+  {
+    id: 'essies-deliveries',
+    title: 'Essies Deliveries - Social Media',
+    category: 'social-media',
+    tags: ['Social Media', 'Delivery Service', 'Brand Campaign'],
+    description: 'Comprehensive social media campaign for a local delivery service, featuring engaging promotional content and service highlights.',
+    challenge: 'Build brand awareness for a new delivery service in a competitive market dominated by established players.',
+    solution: 'Created a series of eye-catching social media graphics with relatable imagery, clear service benefits, and promotional offers to attract first-time customers.',
+    results: [
+      'Brand awareness increased significantly',
+      '25% first-order discount drove conversions',
+      'Consistent visual identity established'
+    ],
+    tools: ['Adobe Photoshop', 'Adobe Illustrator', 'Canva'],
+    year: '2024',
+    featured: false,
+    images: {
+      thumbnail: '/images/portfolio/ed-1.png',
+      hero: '/images/portfolio/ed-1.png',
+      gallery: [
+        '/images/portfolio/ed-1.png',
+        '/images/portfolio/ed-2.png',
+        '/images/portfolio/ed-3.png',
+        '/images/portfolio/ed-4.png'
+      ]
+    }
+  },
+  {
+    id: 'business-cards-collection',
+    title: 'Business Card Design Collection',
+    category: 'branding',
+    tags: ['Business Cards', 'Print Design', 'Brand Identity'],
+    description: 'Professional business card designs for various clients across different industries, from logistics to automotive services.',
+    challenge: 'Create unique, memorable business cards that reflect each client\'s brand personality while maintaining professional appeal.',
+    solution: 'Developed custom designs with strategic use of color, typography, and layout to ensure each card stands out and effectively communicates brand identity.',
+    results: [
+      'Clients reported increased networking success',
+      'Designs praised for professional quality',
+      'Repeat orders from satisfied clients'
+    ],
+    tools: ['Adobe Illustrator', 'Adobe Photoshop', 'Adobe InDesign'],
+    year: '2024-2025',
+    featured: false,
+    images: {
+      thumbnail: '/images/portfolio/card-1.jpg',
+      hero: '/images/portfolio/card-1.jpg',
+      gallery: [
+        '/images/portfolio/card-1.jpg',
+        '/images/portfolio/card-2.jpg'
+      ]
+    }
+  },
+  {
+    id: 'outshine-packaging',
+    title: 'Outshine Product Packaging',
+    category: 'branding',
+    tags: ['Packaging Design', 'Product Labels', 'FMCG'],
+    description: 'Complete packaging design for Outshine consumer products including air fresheners and antiseptic solutions.',
+    challenge: 'Design product labels that stand out on retail shelves while clearly communicating product benefits and usage instructions.',
+    solution: 'Created vibrant, informative packaging with clear hierarchy, appealing visuals, and all required regulatory information organized in an accessible layout.',
+    results: [
+      'Products successfully launched to market',
+      'Positive retailer feedback on shelf appeal',
+      'Clear labeling improved customer trust'
+    ],
+    tools: ['Adobe Illustrator', 'Adobe Photoshop', 'Adobe InDesign'],
+    year: '2023',
+    featured: false,
+    images: {
+      thumbnail: '/images/portfolio/pkg-1.jpg',
+      hero: '/images/portfolio/pkg-1.jpg',
+      gallery: [
+        '/images/portfolio/pkg-1.jpg',
+        '/images/portfolio/pkg-2.jpg'
+      ]
+    }
   }
 ])
 
