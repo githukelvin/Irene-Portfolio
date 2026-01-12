@@ -1,4 +1,5 @@
 <script setup>
+import { ref, computed, watch } from 'vue'
 import {
   Dialog,
   DialogContent,
@@ -28,11 +29,62 @@ const categoryLabels = {
   marketing: 'Marketing',
   'social-media': 'Social Media'
 }
+
+// Gallery state
+const currentImageIndex = ref(0)
+
+// Get all gallery images
+const allImages = computed(() => {
+  if (!props.project) return []
+  return props.project.images.gallery || []
+})
+
+const currentImage = computed(() => {
+  return allImages.value[currentImageIndex.value] || ''
+})
+
+const totalImages = computed(() => allImages.value.length)
+
+// Navigation functions
+const nextImage = () => {
+  if (currentImageIndex.value < totalImages.value - 1) {
+    currentImageIndex.value++
+  } else {
+    currentImageIndex.value = 0 // Loop back to start
+  }
+}
+
+const prevImage = () => {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--
+  } else {
+    currentImageIndex.value = totalImages.value - 1 // Loop to end
+  }
+}
+
+const goToImage = (index) => {
+  currentImageIndex.value = index
+}
+
+// Reset index when project changes
+watch(() => props.project, () => {
+  currentImageIndex.value = 0
+})
+
+// Keyboard navigation
+const handleKeydown = (e) => {
+  if (!props.open) return
+  if (e.key === 'ArrowRight') nextImage()
+  if (e.key === 'ArrowLeft') prevImage()
+}
 </script>
 
 <template>
   <Dialog :open="open" @update:open="emit('close')">
-    <DialogContent class="max-w-3xl max-h-[90vh] p-0 gap-0 overflow-hidden">
+    <DialogContent
+      class="!w-[95vw] !max-w-[95vw] max-h-[90vh] p-0 gap-0 overflow-hidden"
+      @keydown="handleKeydown"
+    >
       <ScrollArea class="max-h-[90vh]">
         <div v-if="project" class="p-6">
           <!-- Header -->
@@ -51,13 +103,71 @@ const categoryLabels = {
             </DialogDescription>
           </DialogHeader>
 
-          <!-- Hero Image -->
-          <div class="aspect-video rounded-lg bg-muted mb-8 relative overflow-hidden">
-            <img
-              :src="project.images.hero"
-              :alt="project.title"
-              class="w-full h-full object-cover"
-            />
+          <!-- Interactive Image Gallery -->
+          <div class="mb-8">
+            <!-- Main Image with Navigation -->
+            <div class="relative group rounded-lg overflow-hidden bg-muted">
+              <!-- Main Image -->
+              <div class="aspect-[16/10] relative">
+                <img
+                  :src="currentImage"
+                  :alt="`${project.title} - Image ${currentImageIndex + 1}`"
+                  class="w-full h-full object-contain bg-black/5"
+                />
+
+                <!-- Image Counter -->
+                <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm font-medium">
+                  {{ currentImageIndex + 1 }} / {{ totalImages }}
+                </div>
+
+                <!-- Previous Button -->
+                <button
+                  v-if="totalImages > 1"
+                  @click="prevImage"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+                  aria-label="Previous image"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6"/>
+                  </svg>
+                </button>
+
+                <!-- Next Button -->
+                <button
+                  v-if="totalImages > 1"
+                  @click="nextImage"
+                  class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+                  aria-label="Next image"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Thumbnail Navigation -->
+              <div v-if="totalImages > 1" class="flex gap-2 p-3 bg-muted/50 justify-center">
+                <button
+                  v-for="(image, index) in allImages"
+                  :key="index"
+                  @click="goToImage(index)"
+                  class="relative w-16 h-16 rounded-md overflow-hidden border-2 transition-all"
+                  :class="index === currentImageIndex ? 'border-accent ring-2 ring-accent/30' : 'border-transparent hover:border-accent/50 opacity-60 hover:opacity-100'"
+                  :aria-label="`Go to image ${index + 1}`"
+                >
+                  <img
+                    :src="image"
+                    :alt="`Thumbnail ${index + 1}`"
+                    class="w-full h-full object-cover"
+                  />
+                </button>
+              </div>
+            </div>
+
+            <!-- Navigation hint -->
+            <p v-if="totalImages > 1" class="text-xs text-muted-foreground text-center mt-2">
+              Use arrow keys or click to navigate
+            </p>
           </div>
 
           <!-- Project Details Grid -->
@@ -144,28 +254,8 @@ const categoryLabels = {
             </div>
           </div>
 
-          <!-- Project Gallery -->
-          <div>
-            <h3 class="text-lg font-semibold mb-4" style="font-family: var(--font-heading)">
-              Project Gallery
-            </h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-              <div
-                v-for="(image, index) in project.images.gallery"
-                :key="index"
-                class="aspect-square rounded-lg bg-muted relative overflow-hidden"
-              >
-                <img
-                  :src="image"
-                  :alt="`${project.title} - Image ${index + 1}`"
-                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-            </div>
-          </div>
-
           <!-- Footer Actions -->
-          <div class="flex justify-end gap-3 mt-8 pt-6 border-t">
+          <div class="flex justify-end gap-3 pt-6 border-t">
             <Button variant="outline" @click="emit('close')">
               Close
             </Button>
