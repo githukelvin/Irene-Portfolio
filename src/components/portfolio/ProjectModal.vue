@@ -82,7 +82,7 @@ const handleKeydown = (e) => {
 <template>
   <Dialog :open="open" @update:open="emit('close')">
     <DialogContent
-      class="!w-[95vw] !max-w-[95vw] max-h-[90vh] p-0 gap-0 overflow-hidden"
+      class="w-full max-w-5xl max-h-[90vh] p-0 gap-0 overflow-hidden"
       @keydown="handleKeydown"
     >
       <ScrollArea class="max-h-[90vh]">
