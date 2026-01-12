@@ -137,7 +137,7 @@ const socialLinks = [
       <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
         <p>&copy; {{ currentYear }} Wangari Irene / Qoi_tec brands. All rights reserved.</p>
         <p class="text-xs">
-          Designed & Built with Vue.js
+          Built by <a href="https://githukelvin.netlify.app/" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">Kelvin Githu</a>
         </p>
       </div>
     </div>

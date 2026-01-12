@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import {
   Dialog,
   DialogContent,
@@ -24,6 +24,12 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 
+// Handle dialog close - prevent when zoomed
+const handleDialogClose = () => {
+  if (isZoomed.value) return
+  emit('close')
+}
+
 const categoryLabels = {
   branding: 'Branding',
   marketing: 'Marketing',
@@ -32,6 +38,8 @@ const categoryLabels = {
 
 // Gallery state
 const currentImageIndex = ref(0)
+const isZoomed = ref(false)
+const isNavigating = ref(false)
 
 // Get all gallery images
 const allImages = computed(() => {
@@ -47,42 +55,107 @@ const totalImages = computed(() => allImages.value.length)
 
 // Navigation functions
 const nextImage = () => {
+  isNavigating.value = true
   if (currentImageIndex.value < totalImages.value - 1) {
     currentImageIndex.value++
   } else {
     currentImageIndex.value = 0 // Loop back to start
   }
+  setTimeout(() => { isNavigating.value = false }, 100)
 }
 
 const prevImage = () => {
+  isNavigating.value = true
   if (currentImageIndex.value > 0) {
     currentImageIndex.value--
   } else {
     currentImageIndex.value = totalImages.value - 1 // Loop to end
   }
+  setTimeout(() => { isNavigating.value = false }, 100)
 }
 
 const goToImage = (index) => {
   currentImageIndex.value = index
 }
 
+// Zoom functions
+const openZoom = () => {
+  isZoomed.value = true
+  // Hide dialog overlay to allow zoom interaction
+  const overlay = document.querySelector('[data-slot="dialog-overlay"]')
+  if (overlay) {
+    overlay.style.opacity = '0'
+    overlay.style.pointerEvents = 'none'
+  }
+}
+
+const closeZoom = () => {
+  // Don't close if we're navigating
+  if (isNavigating.value) return
+
+  isZoomed.value = false
+  // Restore dialog overlay
+  const overlay = document.querySelector('[data-slot="dialog-overlay"]')
+  if (overlay) {
+    overlay.style.opacity = ''
+    overlay.style.pointerEvents = ''
+  }
+}
+
 // Reset index when project changes
 watch(() => props.project, () => {
   currentImageIndex.value = 0
+  if (isZoomed.value) {
+    closeZoom()
+  }
 })
 
-// Keyboard navigation
+// Keyboard navigation (only for modal, not zoom)
 const handleKeydown = (e) => {
-  if (!props.open) return
+  if (!props.open || isZoomed.value) return
+
+  // Navigate images in modal view only
   if (e.key === 'ArrowRight') nextImage()
   if (e.key === 'ArrowLeft') prevImage()
 }
+
+// Global keyboard handler for zoom overlay
+const handleGlobalKeydown = (e) => {
+  if (!isZoomed.value) return
+
+  if (e.key === 'Escape') {
+    closeZoom()
+    e.preventDefault()
+  } else if (e.key === 'ArrowRight') {
+    nextImage()
+    e.preventDefault()
+  } else if (e.key === 'ArrowLeft') {
+    prevImage()
+    e.preventDefault()
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', handleGlobalKeydown)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleGlobalKeydown)
+  // Clean up overlay styles if zoomed when unmounting
+  const overlay = document.querySelector('[data-slot="dialog-overlay"]')
+  if (overlay) {
+    overlay.style.opacity = ''
+    overlay.style.pointerEvents = ''
+  }
+})
 </script>
 
 <template>
-  <Dialog :open="open" @update:open="emit('close')">
+  <Dialog :open="open" @update:open="handleDialogClose">
     <DialogContent
       class="w-full max-w-5xl max-h-[90vh] p-0 gap-0 overflow-hidden"
+      :class="{ 'opacity-0 pointer-events-none': isZoomed }"
+      :style="isZoomed ? { zIndex: -1 } : {}"
       @keydown="handleKeydown"
     >
       <ScrollArea class="max-h-[90vh]">
@@ -112,7 +185,9 @@ const handleKeydown = (e) => {
                 <img
                   :src="currentImage"
                   :alt="`${project.title} - Image ${currentImageIndex + 1}`"
-                  class="w-full h-full object-contain bg-black/5"
+                  class="w-full h-full object-contain bg-black/5 cursor-zoom-in"
+                  @click="openZoom"
+                  title="Click to view full size"
                 />
 
                 <!-- Image Counter -->
@@ -166,7 +241,7 @@ const handleKeydown = (e) => {
 
             <!-- Navigation hint -->
             <p v-if="totalImages > 1" class="text-xs text-muted-foreground text-center mt-2">
-              Use arrow keys or click to navigate
+              Use arrow keys to navigate | Click image to zoom
             </p>
           </div>
 
@@ -272,4 +347,118 @@ const handleKeydown = (e) => {
       </ScrollArea>
     </DialogContent>
   </Dialog>
+
+  <!-- Fullscreen Zoom Overlay -->
+  <Teleport to="body">
+    <Transition name="zoom">
+      <div
+        v-if="isZoomed && project"
+        class="fixed inset-0 z-[200] bg-black/95 backdrop-blur-sm flex items-center justify-center cursor-zoom-out"
+        @click="closeZoom"
+      >
+        <!-- Close Button -->
+        <button
+          @click.stop="closeZoom"
+          class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+          aria-label="Close zoom"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/>
+            <path d="m6 6 12 12"/>
+          </svg>
+        </button>
+
+        <!-- Navigation in zoom mode -->
+        <button
+          v-if="totalImages > 1"
+          @click.stop="prevImage"
+          class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition-colors border border-white/20"
+          aria-label="Previous image"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+        </button>
+
+        <button
+          v-if="totalImages > 1"
+          @click.stop="nextImage"
+          class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition-colors border border-white/20"
+          aria-label="Next image"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </button>
+
+        <!-- Zoomed Image (actual size, scrollable) -->
+        <div
+          class="zoom-scroll-container overflow-auto z-10"
+          @click.stop
+        >
+          <img
+            :src="currentImage"
+            :alt="`${project.title} - Image ${currentImageIndex + 1} (Full size)`"
+            class="block cursor-zoom-out"
+            @click="closeZoom"
+          />
+        </div>
+
+        <!-- Image Counter -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium">
+          {{ currentImageIndex + 1 }} / {{ totalImages }} - Click or press Esc to close
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
+
+<style scoped>
+/* Zoom scroll container */
+.zoom-scroll-container {
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.zoom-scroll-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.zoom-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.zoom-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.zoom-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Zoom transition */
+.zoom-enter-active,
+.zoom-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.zoom-enter-from,
+.zoom-leave-to {
+  opacity: 0;
+}
+
+.zoom-enter-active img,
+.zoom-leave-active img {
+  transition: transform 0.2s ease;
+}
+
+.zoom-enter-from img,
+.zoom-leave-to img {
+  transform: scale(0.95);
+}
+</style>
