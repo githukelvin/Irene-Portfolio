@@ -1,28 +1,34 @@
 <script setup>
-import HelloWorld from '../components/HelloWorld.vue'
-import TheWelcome from '../components/TheWelcome.vue'
+import HeroSection from '@/components/sections/HeroSection.vue'
+import FeaturedWork from '@/components/sections/FeaturedWork.vue'
+import MetricsSection from '@/components/sections/MetricsSection.vue'
+import ServicesSection from '@/components/sections/ServicesSection.vue'
+import AboutPreview from '@/components/sections/AboutPreview.vue'
+import ContactCTA from '@/components/sections/ContactCTA.vue'
+import { useSEO, getBusinessSchema } from '@/composables/useSEO'
+
+useSEO({
+  url: '/',
+  schema: getBusinessSchema()
+})
 </script>
 
 <template>
-  <div class="home">
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-    </nav>
+  <div>
+    <HeroSection
+      name="Wangari Irene"
+      title="Graphic Designer & Digital Marketer"
+      description="Creative Designer & Digital Marketing Specialist based in Nairobi, Kenya. Two experts in one — delivering complete creative solutions with proven results."
+    />
 
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-    <TheWelcome />
+    <FeaturedWork />
+
+    <MetricsSection />
+
+    <ServicesSection />
+
+    <AboutPreview />
+
+    <ContactCTA />
   </div>
 </template>
-
-<style scoped>
-.home {
-  padding: 1rem;
-}
-
-nav {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-</style>

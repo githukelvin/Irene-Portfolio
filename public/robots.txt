@@ -1,0 +1,11 @@
+# Robots.txt for Wangari Irene Portfolio
+# https://wangari-irene.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://wangari-irene.com/sitemap.xml
+
+# Disallow admin/private paths (if any)
+Disallow: /api/

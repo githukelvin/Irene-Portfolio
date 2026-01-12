@@ -17,6 +17,12 @@ coverage
 /cypress/videos/
 /cypress/screenshots/
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -28,3 +34,14 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Playwright MCP screenshots
+.playwright-mcp/
+
+# Claude Code
+.claude/

@@ -1,1 +1,368 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================
+   QOI_TEC BRAND DESIGN SYSTEM
+   Brand Colors: #1B194E (Navy) + #91D8F7 (Sky Blue)
+   ============================================ */
+
+@theme inline {
+  /* Border radius scale */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Color tokens */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Typography */
+  --font-heading: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ============================================
+   DARK MODE (Default) - Navy-based
+   Primary: Deep Navy #1B194E
+   Accent: Sky Blue #91D8F7
+   ============================================ */
+:root {
+  --radius: 0.625rem;
+
+  /* Background layers - Navy base */
+  --background: oklch(0.12 0.04 280);
+  --foreground: oklch(0.95 0 0);
+
+  /* Card surfaces */
+  --card: oklch(0.18 0.06 280);
+  --card-foreground: oklch(0.95 0 0);
+
+  /* Popover */
+  --popover: oklch(0.18 0.06 280);
+  --popover-foreground: oklch(0.95 0 0);
+
+  /* Primary - Navy brand color */
+  --primary: oklch(0.22 0.08 280);
+  --primary-foreground: oklch(0.95 0 0);
+
+  /* Secondary - Lighter navy */
+  --secondary: oklch(0.24 0.06 280);
+  --secondary-foreground: oklch(0.95 0 0);
+
+  /* Muted - Subdued navy */
+  --muted: oklch(0.20 0.05 280);
+  --muted-foreground: oklch(0.65 0 0);
+
+  /* Accent - Sky Blue #91D8F7 */
+  --accent: oklch(0.83 0.10 220);
+  --accent-foreground: oklch(0.15 0.06 280);
+
+  /* Destructive */
+  --destructive: oklch(0.65 0.20 25);
+
+  /* Borders */
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.83 0.10 220);
+
+  /* Chart colors - Navy to Sky Blue spectrum */
+  --chart-1: oklch(0.83 0.10 220);
+  --chart-2: oklch(0.70 0.12 230);
+  --chart-3: oklch(0.55 0.10 260);
+  --chart-4: oklch(0.40 0.08 280);
+  --chart-5: oklch(0.30 0.06 280);
+
+  /* Sidebar */
+  --sidebar: oklch(0.15 0.05 280);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.83 0.10 220);
+  --sidebar-primary-foreground: oklch(0.15 0.06 280);
+  --sidebar-accent: oklch(0.24 0.06 280);
+  --sidebar-accent-foreground: oklch(0.95 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.83 0.10 220);
+
+  /* ============================================
+     MOTION & ANIMATION TOKENS
+     ============================================ */
+  --duration-instant: 50ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ============================================
+     SEMANTIC COLORS
+     ============================================ */
+  --success: oklch(0.70 0.15 145);
+  --warning: oklch(0.80 0.15 85);
+}
+
+/* ============================================
+   LIGHT MODE - Inverted brand colors
+   Primary: Navy for text
+   Accent: Navy for CTAs
+   ============================================ */
+.light {
+  /* Background - Light with subtle blue tint */
+  --background: oklch(0.98 0.01 220);
+  --foreground: oklch(0.18 0.06 280);
+
+  /* Card surfaces - Pure white */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.06 280);
+
+  /* Popover */
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.06 280);
+
+  /* Primary - Brand Navy */
+  --primary: oklch(0.22 0.08 280);
+  --primary-foreground: oklch(0.98 0 0);
+
+  /* Secondary */
+  --secondary: oklch(0.96 0.02 220);
+  --secondary-foreground: oklch(0.22 0.08 280);
+
+  /* Muted */
+  --muted: oklch(0.96 0.02 220);
+  --muted-foreground: oklch(0.45 0.04 280);
+
+  /* Accent - Navy on light backgrounds */
+  --accent: oklch(0.22 0.08 280);
+  --accent-foreground: oklch(0.98 0 0);
+
+  /* Destructive */
+  --destructive: oklch(0.55 0.22 25);
+
+  /* Borders - Navy tinted */
+  --border: oklch(0.18 0.06 280 / 12%);
+  --input: oklch(0.18 0.06 280 / 15%);
+  --ring: oklch(0.22 0.08 280);
+
+  /* Chart colors - Navy spectrum */
+  --chart-1: oklch(0.22 0.08 280);
+  --chart-2: oklch(0.35 0.08 270);
+  --chart-3: oklch(0.50 0.10 240);
+  --chart-4: oklch(0.65 0.12 220);
+  --chart-5: oklch(0.83 0.10 220);
+
+  /* Sidebar */
+  --sidebar: oklch(0.98 0.01 220);
+  --sidebar-foreground: oklch(0.18 0.06 280);
+  --sidebar-primary: oklch(0.22 0.08 280);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.94 0.02 220);
+  --sidebar-accent-foreground: oklch(0.22 0.08 280);
+  --sidebar-border: oklch(0.18 0.06 280 / 10%);
+  --sidebar-ring: oklch(0.22 0.08 280);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* Focus visible styles - Enhanced for accessibility */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+
+  /* Ensure all interactive elements have visible focus */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Skip link focus enhancement */
+  .sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: oklch(0.83 0.10 220 / 30%);
+    color: inherit;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   Respect user preferences for reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+@layer utilities {
+  /* Text gradient for accent highlights */
+  .text-gradient {
+    background: linear-gradient(135deg, oklch(0.83 0.10 220), oklch(0.70 0.12 230));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Accent glow for interactive elements */
+  .glow-accent {
+    box-shadow: 0 0 20px oklch(0.83 0.10 220 / 30%);
+  }
+
+  /* Container max-widths */
+  .container-prose {
+    max-width: 680px;
+  }
+
+  .container-narrow {
+    max-width: 768px;
+  }
+
+  .container-standard {
+    max-width: 1024px;
+  }
+
+  .container-wide {
+    max-width: 1280px;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn var(--duration-normal) var(--ease-out) forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp var(--duration-normal) var(--ease-out) forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn var(--duration-normal) var(--ease-spring) forwards;
+  }
+
+  /* Skeleton pulse animation */
+  .animate-skeleton {
+    background: linear-gradient(
+      90deg,
+      oklch(var(--muted) / 0) 0%,
+      oklch(var(--muted) / 0.5) 50%,
+      oklch(var(--muted) / 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

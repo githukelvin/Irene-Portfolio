@@ -50,11 +50,34 @@ export default defineConfig({
       '@composables': fileURLToPath(new URL('./src/composables', import.meta.url)),
       '@pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
       '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
+      '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
     },
   },
 
-  // Basic build configuration
+  // Production build configuration
   build: {
     chunkSizeWarningLimit: 2000,
+    // Enable source maps for debugging in production (optional)
+    sourcemap: false,
+    // Minification
+    minify: 'esbuild',
+    // Target modern browsers
+    target: 'es2020',
+    // Rollup options for better code splitting
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks
+          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          'ui-vendor': ['@vueuse/core', 'class-variance-authority', 'clsx', 'tailwind-merge'],
+        },
+      },
+    },
+  },
+
+  // Preview server configuration
+  preview: {
+    port: 4173,
+    strictPort: true,
   },
 })

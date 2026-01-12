@@ -1,23 +1,27 @@
-<template>
-  <div class="about">
-    <nav>
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-    </nav>
+<script setup>
+import ProfileHero from '@/components/about/ProfileHero.vue'
+import SkillsSection from '@/components/about/SkillsSection.vue'
+import ExperienceTimeline from '@/components/about/ExperienceTimeline.vue'
+import ToolsSection from '@/components/about/ToolsSection.vue'
+import TestimonialsSection from '@/components/about/TestimonialsSection.vue'
+import ContactCTA from '@/components/sections/ContactCTA.vue'
+import { useSEO, getPersonSchema } from '@/composables/useSEO'
 
-    <h1>This is an about page</h1>
-    <p>This page uses the file-based routing system.</p>
+useSEO({
+  title: 'About Me',
+  description: 'Learn about Wangari Irene - a passionate Graphic Designer and Digital Marketing Specialist with 5+ years of experience based in Nairobi, Kenya.',
+  url: '/about',
+  schema: getPersonSchema()
+})
+</script>
+
+<template>
+  <div class="pt-20">
+    <ProfileHero />
+    <SkillsSection />
+    <ExperienceTimeline />
+    <ToolsSection />
+    <TestimonialsSection />
+    <ContactCTA />
   </div>
 </template>
-
-<style scoped>
-.about {
-  padding: 1rem;
-}
-
-nav {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-</style>

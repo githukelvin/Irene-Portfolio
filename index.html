@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
   <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
+
+    <!-- Primary Meta Tags -->
+    <title>Wangari Irene | Graphic Designer & Digital Marketer | Nairobi, Kenya</title>
+    <meta name="title" content="Wangari Irene | Graphic Designer & Digital Marketer">
+    <meta name="description" content="Creative Designer & Digital Marketing Specialist based in Nairobi, Kenya. 500+ design projects, 280% campaign ROI, 98% client satisfaction. Two experts in one.">
+    <meta name="keywords" content="graphic designer, digital marketer, Nairobi, Kenya, brand identity, logo design, social media marketing, Qoi_tec">
+    <meta name="author" content="Wangari Irene">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://wangari-irene.com/">
+    <meta property="og:title" content="Wangari Irene | Graphic Designer & Digital Marketer">
+    <meta property="og:description" content="Creative Designer & Digital Marketing Specialist. Two experts in one. 500+ projects, 280% campaign ROI.">
+    <meta property="og:image" content="https://wangari-irene.com/images/og-image.jpg">
+    <meta property="og:site_name" content="Wangari Irene | Qoi_tec">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@qoi_tec">
+    <meta name="twitter:creator" content="@qoi_tec">
+    <meta name="twitter:title" content="Wangari Irene | Graphic Designer & Digital Marketer">
+    <meta name="twitter:description" content="Creative Designer & Digital Marketing Specialist. Two experts in one. 500+ projects, 280% campaign ROI.">
+    <meta name="twitter:image" content="https://wangari-irene.com/images/og-image.jpg">
+
+    <!-- Google Fonts - Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1B194E">
+    <meta name="msapplication-TileColor" content="#1B194E">
+
+    <!-- Prevent flash of wrong theme -->
+    <script>
+      (function() {
+        const stored = localStorage.getItem('qoitec-theme');
+        if (stored === 'light') {
+          document.documentElement.classList.add('light');
+        } else if (stored === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          document.documentElement.classList.add('light');
+        } else {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
