@@ -368,32 +368,9 @@ onUnmounted(() => {
           </svg>
         </button>
 
-        <!-- Navigation in zoom mode -->
-        <button
-          v-if="totalImages > 1"
-          @click.stop="prevImage"
-          class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition-colors border border-white/20"
-          aria-label="Previous image"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m15 18-6-6 6-6"/>
-          </svg>
-        </button>
-
-        <button
-          v-if="totalImages > 1"
-          @click.stop="nextImage"
-          class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition-colors border border-white/20"
-          aria-label="Next image"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m9 18 6-6-6-6"/>
-          </svg>
-        </button>
-
-        <!-- Zoomed Image (actual size, scrollable) -->
+        <!-- Zoomed Image (actual size, scrollable) - with padding for nav buttons -->
         <div
-          class="zoom-scroll-container overflow-auto z-10"
+          class="zoom-scroll-container overflow-auto mx-20"
           @click.stop
         >
           <img
@@ -403,6 +380,31 @@ onUnmounted(() => {
             @click="closeZoom"
           />
         </div>
+
+        <!-- Navigation buttons - rendered after scroll container to be on top -->
+        <button
+          v-if="totalImages > 1"
+          @click.stop.prevent="prevImage"
+          class="zoom-nav-btn absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition-colors border border-white/20"
+          aria-label="Previous image"
+          type="button"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+        </button>
+
+        <button
+          v-if="totalImages > 1"
+          @click.stop.prevent="nextImage"
+          class="zoom-nav-btn absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center transition-colors border border-white/20"
+          aria-label="Next image"
+          type="button"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </button>
 
         <!-- Image Counter -->
         <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium">
@@ -414,13 +416,21 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* Zoom navigation buttons - ensure clickable */
+.zoom-nav-btn {
+  z-index: 100;
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
 /* Zoom scroll container */
 .zoom-scroll-container {
-  max-width: 90vw;
+  max-width: calc(100vw - 10rem); /* Account for mx-20 (5rem each side) + button space */
   max-height: 85vh;
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  pointer-events: auto;
 }
 
 .zoom-scroll-container::-webkit-scrollbar {
